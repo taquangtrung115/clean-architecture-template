@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { store } from "../store";
 import { loginUser, logoutUser } from "../features/auth/authSlice";
 
+import axios from "axios";
+import CallAPI from "../utils/callApi";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,26 +38,48 @@ const Login = () => {
 
   const proceedLogin = (e) => {
     e.preventDefault();
+    let objLogin = {
+      userName: email,
+      email: email,
+      password: password
+    };
     if (isValidate()) {
-      fetch("http://localhost:8080/user")
-        .then((res) => res.json())
-        .then((res) => {
-          let data = res;
-          const foundUser = data.filter(
-            (item) => item.email === email && item.password === password
-          );
-          if (foundUser[0]) {
-            toast.success("Login successful");
-            localStorage.setItem("id", foundUser[0].id);
-            store.dispatch(loginUser());
-            navigate("/");
-          } else {
-            toast.warn("Email or password is incorrect");
-          }
-        })
-        .catch((err) => {
-          toast.error("Login failed due to: " + err.message);
-        });
+      CallAPI("identity/login", "POST", objLogin).then((res) => {
+        debugger;
+        let data = res;
+        // const foundUser = data.filter(
+        //   (item) => item.email === email && item.password === password
+        // );
+        if (data) {
+          toast.success("Login successful");
+          localStorage.setItem("id", foundUser[0].id);
+          store.dispatch(loginUser());
+          navigate("/");
+        } else {
+          toast.warn("Email or password is incorrect");
+        }
+      }).catch((err) => {
+        toast.error("Login failed due to: " + err.message);
+      });
+      // fetch("http://localhost:8080/user")
+      //   .then((res) => res.json())
+      //   .then((res) => {
+      //     let data = res;
+      //     const foundUser = data.filter(
+      //       (item) => item.email === email && item.password === password
+      //     );
+      //     if (foundUser[0]) {
+      //       toast.success("Login successful");
+      //       localStorage.setItem("id", foundUser[0].id);
+      //       store.dispatch(loginUser());
+      //       navigate("/");
+      //     } else {
+      //       toast.warn("Email or password is incorrect");
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     toast.error("Login failed due to: " + err.message);
+      //   });
     }
   };
 
