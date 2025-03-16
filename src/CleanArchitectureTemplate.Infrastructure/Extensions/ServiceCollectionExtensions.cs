@@ -4,6 +4,7 @@ using CleanArchitectureTemplate.Domain.Repositories;
 using CleanArchitectureTemplate.Infrastructure.Persistence;
 using CleanArchitectureTemplate.Infrastructure.Repositories;
 using CleanArchitectureTemplate.Infrastructure.Seeders;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,14 +16,45 @@ public static class ServiceCollectionExtensions
 {
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        // Add Cors
+        services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        }));
+        services.ConfigureApplicationCookie(o =>
+        {
+            o.Events = new CookieAuthenticationEvents()
+            {
+                OnRedirectToLogin = (ctx) =>
+                {
+                    if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+                    {
+                        ctx.Response.StatusCode = 401;
+                    }
+
+                    return Task.CompletedTask;
+                },
+                OnRedirectToAccessDenied = (ctx) =>
+                {
+                    if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+                    {
+                        ctx.Response.StatusCode = 403;
+                    }
+
+                    return Task.CompletedTask;
+                }
+            };
+        });
         var connectionString = configuration.GetConnectionString("DB");
         services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
-        services.AddIdentityApiEndpoints<ApplicationUser>()
-            .AddRoles<IdentityRole>()
-            //.AddClaimsPrincipalFactory<RestaurantsUserClaimsPrincipalFactory>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddApiEndpoints();
+        //services.AddIdentityApiEndpoints<ApplicationUser>()
+        //    .AddRoles<IdentityRole>()
+        //    //.AddClaimsPrincipalFactory<RestaurantsUserClaimsPrincipalFactory>()
+        //    .AddEntityFrameworkStores<ApplicationDbContext>()
+        //    .AddApiEndpoints();
         
         // đăng kí seeder 
         services.AddScoped<IRestaurantSeeder, RestaurantSeeder>();
@@ -33,5 +65,7 @@ public static class ServiceCollectionExtensions
         
         // Unit Of Work 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+       
     }
 }
