@@ -1,4 +1,4 @@
-# Clean Architecture Template 
+# Clean Architecture Template | Coppy of https://github.com/viethung23
 
 This is a sample WEBAPI project using clean architecture, .NET 8, and the latest libraries as of July 3, 2024
 
