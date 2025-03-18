@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitectureTemplate.Application.Features.Profile.Queries
+namespace CleanArchitectureTemplate.Application.Features.Profile.Handler.Queries
 {
-    class ProfileQuery
+    class GetProfileByIDQueryHandler
     {
     }
 }

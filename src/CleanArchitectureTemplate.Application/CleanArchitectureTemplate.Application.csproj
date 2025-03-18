@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Users\Queries\**" />
+    <EmbeddedResource Remove="Features\Users\Queries\**" />
+    <None Remove="Features\Users\Queries\**" />
+  </ItemGroup>
+
+  <ItemGroup>
 	  <!-- Application sẽ refer đến Domain  -->
     <ProjectReference Include="..\CleanArchitectureTemplate.Domain\CleanArchitectureTemplate.Domain.csproj" />
   </ItemGroup>
@@ -17,10 +23,6 @@
     <PackageReference Include="MediatR" Version="12.3.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Users\Queries\" />
   </ItemGroup>
 
 </Project>

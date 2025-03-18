@@ -1,11 +1,18 @@
-using CleanArchitectureTemplate.Application.ClaimUser;
+﻿using CleanArchitectureTemplate.Application.ClaimUser;
+using CleanArchitectureTemplate.Application.Features.Users.Request.Command;
 using CleanArchitectureTemplate.Domain.Entities;
 using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace CleanArchitectureTemplate.Application.Features.Users.Commands.UpdateUserDetails;
+namespace CleanArchitectureTemplate.Application.Features.Users.Handler.Command;
+
 
 public class UpdateUserDetailsCommandHandler(ILogger<UpdateUserDetailsCommandHandler> logger,
     IUserContext userContext,
