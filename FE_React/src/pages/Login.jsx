@@ -47,12 +47,9 @@ const Login = () => {
       CallAPI("identity/login", "POST", objLogin).then((res) => {
         debugger;
         let data = res;
-        // const foundUser = data.filter(
-        //   (item) => item.email === email && item.password === password
-        // );
         if (data) {
           toast.success("Login successful");
-          localStorage.setItem("id", foundUser[0].id);
+          localStorage.setItem("tokenLogin", data.data.token);
           store.dispatch(loginUser());
           navigate("/");
         } else {
@@ -61,25 +58,6 @@ const Login = () => {
       }).catch((err) => {
         toast.error("Login failed due to: " + err.message);
       });
-      // fetch("http://localhost:8080/user")
-      //   .then((res) => res.json())
-      //   .then((res) => {
-      //     let data = res;
-      //     const foundUser = data.filter(
-      //       (item) => item.email === email && item.password === password
-      //     );
-      //     if (foundUser[0]) {
-      //       toast.success("Login successful");
-      //       localStorage.setItem("id", foundUser[0].id);
-      //       store.dispatch(loginUser());
-      //       navigate("/");
-      //     } else {
-      //       toast.warn("Email or password is incorrect");
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     toast.error("Login failed due to: " + err.message);
-      //   });
     }
   };
 
@@ -97,7 +75,7 @@ const Login = () => {
                 value={email}
                 required={true}
                 onChange={(e) => setEmail(e.target.value)}
-                type="email"
+                type="input"
                 className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
               />
               <label className="font-semibold text-sm pb-1 block text-accent-content">

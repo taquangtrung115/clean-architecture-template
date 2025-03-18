@@ -6,6 +6,7 @@ public interface IUnitOfWork : IDisposable
 {
     public IRestaurantsRepository RestaurantsRepository { get; }
     public IDishesRepository DishesRepository { get; }
+    public IProfileRepository ProfileRepository { get; }
 
     public Task<int> SaveChangeAsync();
 }
