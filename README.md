@@ -2,10 +2,6 @@
 
 This is a sample WEBAPI project using clean architecture, .NET 8, and the latest libraries as of July 3, 2024
 
-![Clean Architecture!](/assets/images/clean-architecture.png 'Clean Architecture')
-
-
-
 ## Frameworks - Libraries - Pattern
 
 1. Entity Framework core 
