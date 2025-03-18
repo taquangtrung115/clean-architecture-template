@@ -1,10 +1,16 @@
+﻿using CleanArchitectureTemplate.Application.Features.Users.Request.Command;
 using CleanArchitectureTemplate.Domain.Entities;
 using CleanArchitectureTemplate.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace CleanArchitectureTemplate.Application.Features.Users.Commands.UnassignUserRole;
+namespace CleanArchitectureTemplate.Application.Features.Users.Handler.Command;
 
 public class UnassignUserRoleCommandHandler(ILogger<UnassignUserRoleCommandHandler> logger,
     UserManager<ApplicationUser> userManager,

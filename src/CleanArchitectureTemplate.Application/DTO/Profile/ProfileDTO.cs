@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchitectureTemplate.Application.Features.Profile.Command
+namespace CleanArchitectureTemplate.Application.DTO.Profile
 {
-    class ProfileCommandHandler
+    public class ProfileDTO
     {
     }
 }

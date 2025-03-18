@@ -1,9 +1,5 @@
 using Asp.Versioning;
-using CleanArchitectureTemplate.Application.Features.Users.Commands.AssignUserRole;
-using CleanArchitectureTemplate.Application.Features.Users.Commands.Login;
-using CleanArchitectureTemplate.Application.Features.Users.Commands.Register;
-using CleanArchitectureTemplate.Application.Features.Users.Commands.UnassignUserRole;
-using CleanArchitectureTemplate.Application.Features.Users.Commands.UpdateUserDetails;
+using CleanArchitectureTemplate.Application.Features.Users.Request.Command;
 using CleanArchitectureTemplate.Domain.Constants;
 using CleanArchitectureTemplate.Domain.Entities;
 using MediatR;
