@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
 const initialState = {
-  userId: localStorage.getItem('id') || false,
-  isLoggedIn: localStorage.getItem('id') ? true : false,
+  userId: localStorage.getItem('tokenLogin') || false,
+  isLoggedIn: localStorage.getItem('tokenLogin') ? true : false,
   darkMode: true
 };
 
@@ -13,7 +13,7 @@ const authSlice = createSlice({
   reducers: {
     loginUser: (state) => {
       state.isLoggedIn = true;
-      state.userId = localStorage.getItem('id');
+      state.userId = localStorage.getItem('tokenLogin');
     },
     logoutUser: (state) => {
       state.isLoggedIn = false;
@@ -22,9 +22,9 @@ const authSlice = createSlice({
     },
     changeMode: (state) => {
       state.darkMode = !state.darkMode;
-      if(state.darkMode){
+      if (state.darkMode) {
         document.querySelector('html').setAttribute('data-theme', "dark");
-      }else{
+      } else {
         document.querySelector('html').setAttribute('data-theme', "winter");
       }
     }

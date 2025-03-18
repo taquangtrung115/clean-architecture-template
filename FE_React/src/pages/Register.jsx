@@ -67,18 +67,24 @@ const Register = () => {
     };
 
     if (isValidate()) {
-      fetch("http://localhost:8080/user", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(regObj),
-      })
-        .then((res) => {
-          toast.success("Registration Successful");
-          navigate("/login");
-        })
-        .catch((err) => {
-          toast.error("Failed: " + err.message);
-        });
+      CallAPI("identity/register", "POST", regObj).then((res) => {
+        toast.success("Registration Successful");
+        navigate("/login");
+      }).catch((err) => {
+        toast.error("Failed: " + err.message);
+      });
+      // fetch("http://localhost:8080/user", {
+      //   method: "POST",
+      //   headers: { "content-type": "application/json" },
+      //   body: JSON.stringify(regObj),
+      // })
+      //   .then((res) => {
+      //     toast.success("Registration Successful");
+      //     navigate("/login");
+      //   })
+      //   .catch((err) => {
+      //     toast.error("Failed: " + err.message);
+      //   });
     }
   };
   return (

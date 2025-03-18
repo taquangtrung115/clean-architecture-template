@@ -62,6 +62,7 @@ public static class ServiceCollectionExtensions
         // Đăng kí repo (sử dụng trong trường hơpj cần inject trực tiếp vào để xử lý trong Handler)
         services.AddScoped<IRestaurantsRepository, RestaurantsRepository>();
         services.AddScoped<IDishesRepository, DishesRepository>();
+        services.AddScoped<IProfileRepository, ProfileRepository>();
         
         // Unit Of Work 
         services.AddScoped<IUnitOfWork, UnitOfWork>();

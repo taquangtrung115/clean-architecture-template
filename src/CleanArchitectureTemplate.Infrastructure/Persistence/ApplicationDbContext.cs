@@ -9,6 +9,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     internal DbSet<Restaurant> Restaurants { get; set; }
     internal DbSet<Dish> Dishes { get; set; }
+    internal DbSet<Profile> Profile { get; set; }
 
     /*sử dụng hàm này trong trường hợp muốn fix cứng connectString  và muốn flexible thì phải truyền từ ngoài vào qua contructor (ở đây dùng primary constructor) 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
