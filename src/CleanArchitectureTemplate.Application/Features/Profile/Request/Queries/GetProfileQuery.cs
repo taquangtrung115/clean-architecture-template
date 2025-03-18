@@ -1,5 +1,5 @@
 ﻿using CleanArchitectureTemplate.Application.Common;
-using CleanArchitectureTemplate.Application.Features.Profile.DTO;
+using CleanArchitectureTemplate.Application.DTO.Profile;
 using CleanArchitectureTemplate.Domain.Constants;
 using MediatR;
 using System;
