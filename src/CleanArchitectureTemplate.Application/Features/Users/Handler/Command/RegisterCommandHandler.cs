@@ -1,5 +1,8 @@
-﻿using CleanArchitectureTemplate.Application.Features.Users.Request.Command;
+﻿using CleanArchitectureTemplate.Application.DTO.Profile;
+using CleanArchitectureTemplate.Application.Features.Profile.Request.Command;
+using CleanArchitectureTemplate.Application.Features.Users.Request.Command;
 using CleanArchitectureTemplate.Domain.Entities;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -9,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace CleanArchitectureTemplate.Application.Features.Users.Handler.Command;
-public class RegisterCommandHandler(UserManager<ApplicationUser> userManager
+public class RegisterCommandHandler(IMediator mediator, IMapper mapper, UserManager<ApplicationUser> userManager
         , SignInManager<ApplicationUser> signInManager
         ) : IRequestHandler<RegisterCommand, IdentityResult>
 {
@@ -22,7 +25,12 @@ public class RegisterCommandHandler(UserManager<ApplicationUser> userManager
         };
 
         var result = await userManager.CreateAsync(user, request.Password);
-
+        if (result.Succeeded)
+        {
+            var profileCreate = mapper.Map<ProfileDTO>(request);
+            var createProfileCommand = new CreateProfileCommand { ProfileCreate = profileCreate };
+            await mediator.Send(createProfileCommand);
+        }
         return result;
     }
 }
