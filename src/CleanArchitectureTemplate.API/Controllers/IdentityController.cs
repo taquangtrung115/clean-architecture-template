@@ -1,5 +1,7 @@
 using Asp.Versioning;
 using CleanArchitectureTemplate.Application.Features.Users.Commands.AssignUserRole;
+using CleanArchitectureTemplate.Application.Features.Users.Commands.Login;
+using CleanArchitectureTemplate.Application.Features.Users.Commands.Register;
 using CleanArchitectureTemplate.Application.Features.Users.Commands.UnassignUserRole;
 using CleanArchitectureTemplate.Application.Features.Users.Commands.UpdateUserDetails;
 using CleanArchitectureTemplate.Domain.Constants;
@@ -50,42 +52,27 @@ public class IdentityController(IMediator mediator, IConfiguration configuration
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login(LoginCommand command)
     {
-        var result = await _signInManager.PasswordSignInAsync(request.Username, request.Password, false, false);
-        if (result.Succeeded)
-        {
-            var user = await _userManager.FindByNameAsync(request.Username);
-            var token = GenerateJwtToken(user);
-            return Ok(new { Token = token });
-        }
-
+        var result = await mediator.Send(command);
+        if (!string.IsNullOrEmpty(result))
+            return Ok(new { Token = result });
         return Unauthorized();
     }
-
-    private string GenerateJwtToken(ApplicationUser user)
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterCommand command)
     {
-        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var tokenDescriptor = new SecurityTokenDescriptor
+        if (!ModelState.IsValid)
         {
-            Subject = new ClaimsIdentity(new[]
-            {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
-            }),
-            Expires = DateTime.UtcNow.AddHours(1),
-            Issuer = _configuration["Jwt:Issuer"],
-            Audience = _configuration["Jwt:Audience"],
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        };
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
-    }
-}
+            return BadRequest(ModelState);
+        }
 
-public class LoginRequest
-{
-    public string Username { get; set; }
-    public string Password { get; set; }
+        var result = await mediator.Send(command);
+        if (result.Succeeded)
+        {
+            return Ok(new { message = "User registered successfully" });
+        }
+
+        return BadRequest(result.Errors);
+    }
 }
