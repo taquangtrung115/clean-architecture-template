@@ -10,6 +10,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     internal DbSet<Restaurant> Restaurants { get; set; }
     internal DbSet<Dish> Dishes { get; set; }
     internal DbSet<Profile> Profile { get; set; }
+    internal DbSet<Profile> AdditionImgUrl { get; set; }
+    internal DbSet<Profile> Brand { get; set; }
+    internal DbSet<Profile> Category { get; set; }
+    internal DbSet<Profile> Order { get; set; }
+    internal DbSet<Profile> OrderDetail { get; set; }
+    internal DbSet<Profile> Product { get; set; }
+    internal DbSet<Profile> Review { get; set; }
 
     /*sử dụng hàm này trong trường hợp muốn fix cứng connectString  và muốn flexible thì phải truyền từ ngoài vào qua contructor (ở đây dùng primary constructor) 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -58,7 +58,8 @@ public class RestaurantSeeder(ApplicationDbContext dbContext) : IRestaurantSeede
     {
         var owner = new ApplicationUser()
         {
-            Email = "seed-user@test.com"
+            Email = "admin@test.com",
+            UserName = "admin"
         };
 
         List<Restaurant> restaurants = [

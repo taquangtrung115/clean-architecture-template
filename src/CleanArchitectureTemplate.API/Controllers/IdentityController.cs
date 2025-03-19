@@ -56,6 +56,7 @@ public class IdentityController(IMediator mediator, IConfiguration configuration
         return Unauthorized();
     }
     [HttpPost("register")]
+    [AllowAnonymous]
     public async Task<IActionResult> Register(RegisterCommand command)
     {
         if (!ModelState.IsValid)

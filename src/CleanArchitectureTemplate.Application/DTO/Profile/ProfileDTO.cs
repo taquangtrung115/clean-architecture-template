@@ -13,6 +13,6 @@ namespace CleanArchitectureTemplate.Application.DTO.Profile
         public string LastName { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
-        public DateTime DayOfBirth { get; set; }
+        public DateOnly? DayOfBirth { get; set; }
     }
 }

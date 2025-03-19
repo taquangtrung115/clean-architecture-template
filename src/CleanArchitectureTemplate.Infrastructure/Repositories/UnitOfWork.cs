@@ -1,33 +1,75 @@
 using CleanArchitectureTemplate.Domain.Interfaces;
 using CleanArchitectureTemplate.Domain.Repositories;
 using CleanArchitectureTemplate.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using CleanArchitectureTemplate.Domain.Entities.Base;
 
 namespace CleanArchitectureTemplate.Infrastructure.Repositories;
 
-public class UnitOfWork(ApplicationDbContext dbContext) : IUnitOfWork
+public class UnitOfWork : IUnitOfWork
 {
-    private IRestaurantsRepository? _restaurantsRepository;   // ? ở sau kiểu dữ liệu để compiler hiểu rằng biến khai báo có thể null 
+    private readonly ApplicationDbContext _dbContext;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private IRestaurantsRepository? _restaurantsRepository;
     private IDishesRepository? _dishesRepository;
     private IProfileRepository? _profileRepository;
 
-    // nếu _restaurantsRepository mà null thì _restaurantsRepository = new RestaurantsRepository(_dbContext)
-    // điều này đảm bảo rằng khi khởi tạo mới RestaurantsRepository thì nó sẽ lưu lại vào biết _restaurantsRepository
-    // để lần sau gọi đến thì _restaurantsRepository đã có sẵn không phải thự hiện new()
+    public UnitOfWork(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
+    {
+        _dbContext = dbContext;
+        _httpContextAccessor = httpContextAccessor;
+    }
+
     public IRestaurantsRepository RestaurantsRepository =>
-        _restaurantsRepository ??= new RestaurantsRepository(dbContext);
+        _restaurantsRepository ??= new RestaurantsRepository(_dbContext);
 
     public IDishesRepository DishesRepository =>
-        _dishesRepository ??= new DishesRepository(dbContext);
+        _dishesRepository ??= new DishesRepository(_dbContext);
 
     public IProfileRepository ProfileRepository =>
-         _profileRepository ??= new ProfileRepository(dbContext);
+         _profileRepository ??= new ProfileRepository(_dbContext);
 
-    // Save Change
-    public async Task<int> SaveChangeAsync() => await dbContext.SaveChangesAsync();
+    public async Task<int> SaveChangeAsync()
+    {
+        ApplyAuditInformation();
+        return await _dbContext.SaveChangesAsync();
+    }
 
-    // hàm để hủy đối tượng _dbContext khi dùng xong 
     public void Dispose()
     {
-        dbContext.Dispose();
+        _dbContext.Dispose();
+    }
+
+    public void ApplyAuditInformation()
+    {
+        var entries = _dbContext.ChangeTracker.Entries<AuditableEntity<int>>();
+
+        string? currentUser = _httpContextAccessor.HttpContext?.User.Identity?.Name ?? "System";
+
+        foreach (var entry in entries)
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.CreationDate = DateTime.UtcNow;
+                    entry.Entity.CreatedBy = currentUser;
+                    entry.Entity.IsDeleted = false;
+                    break;
+
+                case EntityState.Modified:
+                    entry.Entity.ModificationDate = DateTime.UtcNow;
+                    entry.Entity.ModificationBy = currentUser;
+                    break;
+
+                case EntityState.Deleted:
+                    entry.State = EntityState.Modified;
+                    entry.Entity.IsDeleted = true;
+                    entry.Entity.ModificationDate = DateTime.UtcNow;
+                    entry.Entity.ModificationBy = currentUser;
+                    break;
+            }
+        }
     }
 }

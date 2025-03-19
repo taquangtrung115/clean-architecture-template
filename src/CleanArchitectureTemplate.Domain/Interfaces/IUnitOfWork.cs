@@ -9,4 +9,5 @@ public interface IUnitOfWork : IDisposable
     public IProfileRepository ProfileRepository { get; }
 
     public Task<int> SaveChangeAsync();
+    public void ApplyAuditInformation();
 }
