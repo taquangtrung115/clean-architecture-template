@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitectureTemplate.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250318030038_NewMigration_20250318_2")]
-    partial class NewMigration_20250318_2
+    [Migration("20250319141432_NewMigration_20250319_3")]
+    partial class NewMigration_20250319_3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,11 +130,9 @@ namespace CleanArchitectureTemplate.Infrastructure.Migrations
 
             modelBuilder.Entity("CleanArchitectureTemplate.Domain.Entities.Profile", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -146,8 +144,8 @@ namespace CleanArchitectureTemplate.Infrastructure.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DayOfBirth")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("DayOfBirth")
+                        .HasColumnType("date");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");

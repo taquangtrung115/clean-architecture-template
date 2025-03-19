@@ -5,7 +5,7 @@
 namespace CleanArchitectureTemplate.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class NewMigration_20250318 : Migration
+    public partial class NewMigration_20250319_3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
