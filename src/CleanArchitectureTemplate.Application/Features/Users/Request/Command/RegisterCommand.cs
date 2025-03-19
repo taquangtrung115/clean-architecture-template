@@ -16,4 +16,5 @@ public class RegisterCommand : IRequest<IdentityResult>
     public string LastName { get; set; }
     public string Phone { get; set; }
     public string Address { get; set; }
+    public DateOnly? DayOfBirth { get; set; }
 }

@@ -21,7 +21,8 @@ public class RegisterCommandHandler(IMediator mediator, IMapper mapper, UserMana
         var user = new ApplicationUser
         {
             UserName = request.Username,
-            Email = request.Email
+            Email = request.Email,
+            DateOfBirth = request.DayOfBirth
         };
 
         var result = await userManager.CreateAsync(user, request.Password);

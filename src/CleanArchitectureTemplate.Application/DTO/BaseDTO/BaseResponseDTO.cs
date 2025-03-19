@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace CleanArchitectureTemplate.Application.DTO.BaseDTO
 {
-    public class BaseCommandResponse
+    public class BaseCommandResponse<T>
     {
-        public int ID { get; set; }
+        public T ID { get; set; }
         public bool Success { get; set; }
         public string Message { get; set; }
         public List<string> Errors { get; set; }
-        public BaseCommandResponse(int id, bool isSucces, List<string> errors)
+        public BaseCommandResponse(T id, bool isSucces, List<string> errors)
         {
             Success = isSucces;
             ID = id;
@@ -22,7 +22,7 @@ namespace CleanArchitectureTemplate.Application.DTO.BaseDTO
                 Message = "Fail";
             Errors = errors;
         }
-        public BaseCommandResponse(int id, bool isSucces)
+        public BaseCommandResponse(T id, bool isSucces)
         {
             Success = isSucces;
             ID = id;

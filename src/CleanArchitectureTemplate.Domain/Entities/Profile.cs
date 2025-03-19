@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace CleanArchitectureTemplate.Domain.Entities
 {
-    public class Profile : AuditableEntity<int>
+    public class Profile : AuditableEntity<Guid>
     {
         public string Name { get; set; }
         public string LastName { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
-        public DateTime DayOfBirth { get; set; }
+        public DateOnly? DayOfBirth { get; set; }
     }
 }

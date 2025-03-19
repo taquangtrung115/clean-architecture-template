@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitectureTemplate.Application.Features.Profile.Request.Command
 {
-    public class CreateProfileCommand : IRequest<BaseCommandResponse>
+    public class CreateProfileCommand : IRequest<BaseCommandResponse<Guid>>
     {
         public ProfileDTO ProfileCreate { get; set; }
     }
