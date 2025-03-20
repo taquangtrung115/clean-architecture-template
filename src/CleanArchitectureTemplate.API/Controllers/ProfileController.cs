@@ -1,5 +1,5 @@
 using CleanArchitectureTemplate.Application.DTO.Profile;
-using CleanArchitectureTemplate.Application.Features.Restaurants.Commands.CreateRestaurant;
+using CleanArchitectureTemplate.Application.Features.Profile.Request.Command;
 using CleanArchitectureTemplate.Application.Features.Restaurants.Queries.GetAllRestaurants;
 using CleanArchitectureTemplate.Application.Features.Restaurants.Queries.GetRestaurantById;
 using MediatR;
@@ -31,7 +31,7 @@ public class ProfileController(IMediator mediator) : ControllerBase
 
     [HttpPost]
     //[Authorize(Roles = UserRoles.Owner)]
-    public async Task<IActionResult> CreateProfile(CreateRestaurantCommand command)
+    public async Task<IActionResult> CreateProfile(CreateProfileCommand command)
     {
         var id = await mediator.Send(command);
         return Created();
