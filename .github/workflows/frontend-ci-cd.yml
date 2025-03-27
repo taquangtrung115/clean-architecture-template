@@ -1,5 +1,8 @@
 name: Frontend CI/CD
-
+uses: actions/upload-artifact@v3
+  with:
+    name: frontend-artifact
+    path: FE_React/dist
 on:
   push:
     branches:

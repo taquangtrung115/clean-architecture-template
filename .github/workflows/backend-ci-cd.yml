@@ -1,5 +1,8 @@
 name: Backend CI/CD
-
+uses: actions/upload-artifact@v3
+  with:
+    name: backend-artifact
+    path: publish/
 on:
   push:
     branches:
