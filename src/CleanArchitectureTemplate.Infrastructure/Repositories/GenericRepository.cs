@@ -58,6 +58,11 @@ public abstract class GenericRepository<T>(ApplicationDbContext dbContext) : IGe
     {
         DbSet.RemoveRange(entities);
     }
+    public void RemoveRange(List<Guid> ids)
+    {
+        var entities = DbSet.Where(e => ids.Contains((Guid)(object)e.GetType().GetProperty("Id").GetValue(e, null))).ToList();
+        DbSet.RemoveRange(entities);
+    }
 
     // khai báo các phương thức abstract để các lớp kế thừa phải override 
     public abstract Task<(List<T>, int)> GetAllMatchingAsync(string? searchPhrase,

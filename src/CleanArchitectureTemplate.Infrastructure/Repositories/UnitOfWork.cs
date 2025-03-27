@@ -12,8 +12,6 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private IRestaurantsRepository? _restaurantsRepository;
-    private IDishesRepository? _dishesRepository;
     private IProfileRepository? _profileRepository;
     private IAdditionImgUrlReponsitory? _additionImgUrlReponsitory;
     private IAddressReponsitory? _addressReponsitory;
@@ -29,12 +27,6 @@ public class UnitOfWork : IUnitOfWork
         _dbContext = dbContext;
         _httpContextAccessor = httpContextAccessor;
     }
-
-    public IRestaurantsRepository RestaurantsRepository =>
-        _restaurantsRepository ??= new RestaurantsRepository(_dbContext);
-
-    public IDishesRepository DishesRepository =>
-        _dishesRepository ??= new DishesRepository(_dbContext);
 
     public IProfileRepository ProfileRepository =>
          _profileRepository ??= new ProfileRepository(_dbContext); 
@@ -55,9 +47,9 @@ public class UnitOfWork : IUnitOfWork
     public IReviewReponsitory ReviewReponsitory =>
          _reviewReponsitory ??= new ReviewReponsitory(_dbContext);
 
-    public async Task<int> SaveChangeAsync()
+    public async Task<int> SaveChangeAsync<IKey>()
     {
-        ApplyAuditInformation();
+        ApplyAuditInformation<IKey>();
         return await _dbContext.SaveChangesAsync();
     }
 
@@ -66,34 +58,47 @@ public class UnitOfWork : IUnitOfWork
         _dbContext.Dispose();
     }
 
-    public void ApplyAuditInformation()
+    public void ApplyAuditInformation<IKey>()
     {
-        var entries = _dbContext.ChangeTracker.Entries<AuditableEntity<int>>();
+        var entries = _dbContext.ChangeTracker.Entries<AuditableEntity<IKey>>();
 
         string? currentUser = _httpContextAccessor.HttpContext?.User.Identity?.Name ?? "System";
 
         foreach (var entry in entries)
         {
-            switch (entry.State)
+            try
             {
-                case EntityState.Added:
-                    entry.Entity.CreationDate = DateTime.UtcNow;
-                    entry.Entity.CreatedBy = currentUser;
-                    entry.Entity.IsDeleted = false;
-                    break;
+                // Check if the Id is of type Guid and if it is empty, initialize it with a new Guid
+                if (entry.Entity.Id is Guid guid && guid == Guid.Empty)
+                {
+                    entry.Entity.Id = (IKey)(object)Guid.NewGuid();
+                }
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreationDate = DateTime.UtcNow;
+                        entry.Entity.CreatedBy = currentUser;
+                        entry.Entity.IsDeleted = false;
+                        break;
 
-                case EntityState.Modified:
-                    entry.Entity.ModificationDate = DateTime.UtcNow;
-                    entry.Entity.ModificationBy = currentUser;
-                    break;
+                    case EntityState.Modified:
+                        entry.Entity.ModificationDate = DateTime.UtcNow;
+                        entry.Entity.ModificationBy = currentUser;
+                        break;
 
-                case EntityState.Deleted:
-                    entry.State = EntityState.Modified;
-                    entry.Entity.IsDeleted = true;
-                    entry.Entity.ModificationDate = DateTime.UtcNow;
-                    entry.Entity.ModificationBy = currentUser;
-                    break;
+                    case EntityState.Deleted:
+                        entry.State = EntityState.Modified;
+                        entry.Entity.IsDeleted = true;
+                        entry.Entity.ModificationDate = DateTime.UtcNow;
+                        entry.Entity.ModificationBy = currentUser;
+                        break;
+                }
             }
+            catch (Exception ex)
+            {
+
+            }
+            
         }
     }
 }

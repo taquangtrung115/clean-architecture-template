@@ -31,11 +31,11 @@ public class ProfileRepository(ApplicationDbContext dbContext) : GenericReposito
         if (sortBy != null)
         {
             // xác định các column có thể Sort 
-            var columnsSelector = new Dictionary<string, Expression<Func<Dish, object>>>
+            var columnsSelector = new Dictionary<string, Expression<Func<Profile, object>>>
             {
-                { nameof(Dish.Name), r => r.Name },
-                { nameof(Dish.Description), r => r.Description },
-                { nameof(Dish.Price), r => r.Price },
+                { nameof(Profile.Name), r => r.Name },
+                { nameof(Profile.DayOfBirth), r => r.DayOfBirth },
+                { nameof(Profile.LastName), r => r.LastName },
             };
 
             if (columnsSelector.TryGetValue(sortBy, out var selectedColumn))

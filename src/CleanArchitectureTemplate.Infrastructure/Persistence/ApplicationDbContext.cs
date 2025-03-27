@@ -7,8 +7,6 @@ namespace CleanArchitectureTemplate.Infrastructure.Persistence;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
     : IdentityDbContext<ApplicationUser>(options)
 {
-    internal DbSet<Restaurant> Restaurants { get; set; }
-    internal DbSet<Dish> Dishes { get; set; }
     internal DbSet<Profile> Profile { get; set; }
     internal DbSet<AdditionImgUrl> AdditionImgUrl { get; set; }
     internal DbSet<Brand> Brand { get; set; }
@@ -29,17 +27,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Restaurant>()
-            .OwnsOne(r => r.Address);
+        //modelBuilder.Entity<Restaurant>()
+        //    .OwnsOne(r => r.Address);
 
-        modelBuilder.Entity<Restaurant>()
-            .HasMany(r => r.Dishes)
-            .WithOne()
-            .HasForeignKey(d => d.RestaurantId);
+        //modelBuilder.Entity<Restaurant>()
+        //    .HasMany(r => r.Dishes)
+        //    .WithOne()
+        //    .HasForeignKey(d => d.RestaurantId);
 
-        modelBuilder.Entity<ApplicationUser>()
-            .HasMany(o => o.OwnedRestaurants)
-            .WithOne(r => r.Owner)
-            .HasForeignKey(r => r.OwnerId);
+        //modelBuilder.Entity<ApplicationUser>()
+        //    .HasMany(o => o.OwnedRestaurants)
+        //    .WithOne(r => r.Owner)
+        //    .HasForeignKey(r => r.OwnerId);
     }
 }
