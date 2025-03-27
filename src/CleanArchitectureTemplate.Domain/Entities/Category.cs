@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitectureTemplate.Domain.Entities
 {
-    public class Category : AuditableEntity<Guid>
+    public class Category : AuditableEntity
     {
         public string CategoryCode { get; set; }
         public string CategoryName { get; set; }

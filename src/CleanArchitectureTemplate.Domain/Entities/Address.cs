@@ -1,6 +1,8 @@
-﻿namespace CleanArchitectureTemplate.Domain.Entities;
+﻿using CleanArchitectureTemplate.Domain.Entities.Base;
 
-public class Address
+namespace CleanArchitectureTemplate.Domain.Entities;
+
+public class Address : AuditableEntity
 {
     public string? City { get; set; }
     public string? Street { get; set; }

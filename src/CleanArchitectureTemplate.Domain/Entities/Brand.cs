@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitectureTemplate.Domain.Entities
 {
-    public class Brand : AuditableEntity<Guid>
+    public class Brand : AuditableEntity
     {
         public string BrandCode { get; set; }
         public string BrandName { get; set; }

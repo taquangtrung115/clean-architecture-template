@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitectureTemplate.Domain.Entities
 {
-    public class OrderDetail : AuditableEntity<Guid>
+    public class OrderDetail : AuditableEntity
     {
         public Guid OrderID { get; set; }
         public Guid ProductID { get; set; }

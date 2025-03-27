@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         // Add Cors
-        services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+        services.AddCors(o => o.AddPolicy("AllowAllOrigins", builder =>
         {
             builder.AllowAnyOrigin()
                    .AllowAnyMethod()

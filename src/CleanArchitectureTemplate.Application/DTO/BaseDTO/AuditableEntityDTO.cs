@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace CleanArchitectureTemplate.Application.DTO.BaseDTO;
-public abstract class AuditableEntity<TKey> : Entity<TKey>
+public abstract class AuditableEntity : Entity
 {
     public DateTime CreationDate { get; set; }
     public string? CreatedBy { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitectureTemplate.Domain.Entities
 {
-    public class AdditionImgUrl : AuditableEntity<Guid>
+    public class AdditionImgUrl : AuditableEntity
     {
         public Guid ProductID { get; set; }
         public string ImageUrl { get; set; }

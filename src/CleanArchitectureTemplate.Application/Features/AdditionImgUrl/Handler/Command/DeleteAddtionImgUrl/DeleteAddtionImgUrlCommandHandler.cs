@@ -17,7 +17,7 @@ public class DeleteAddtionImgUrlCommandHandler(IUnitOfWork unitOfWork
     public async Task<BaseCommandResponse<Guid>> Handle(DeleteAddtionImgUrlCommandRequest request, CancellationToken cancellationToken)
     {
         unitOfWork.AdditionImgUrlReponsitory.RemoveRange(request.ListID);
-        await unitOfWork.SaveChangeAsync<Guid>();
+        await unitOfWork.SaveChangeAsync();
 
         return new BaseCommandResponse<Guid>
         {

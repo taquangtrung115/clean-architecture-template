@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitectureTemplate.Application.DTO.Profile
 {
-    public class ProfileDTO : AuditableEntity<Guid>
+    public class ProfileDTO : AuditableEntity
     {
         public string Name { get; set; }
         public string LastName { get; set; }

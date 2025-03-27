@@ -1,6 +1,6 @@
 namespace CleanArchitectureTemplate.Domain.Entities.Base;
 
-public class AuditableEntity<TKey> : Entity<TKey>
+public class AuditableEntity : Entity
 {
     public DateTime CreationDate { get; set; }
     public string? CreatedBy { get; set; }
