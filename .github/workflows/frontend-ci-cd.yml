@@ -1,8 +1,5 @@
 name: Frontend CI/CD
-uses: actions/upload-artifact@v3
-  with:
-    name: frontend-artifact
-    path: FE_React/dist
+
 on:
   push:
     branches:
@@ -22,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22' # Nếu dùng Node 20, đổi thành '20'
+          node-version: '20' # Nếu cần Node 22, đảm bảo GitHub Actions hỗ trợ
 
       - name: Install dependencies
         run: |
@@ -35,7 +32,7 @@ jobs:
           npm run build
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: frontend-artifact
           path: FE_React/dist
