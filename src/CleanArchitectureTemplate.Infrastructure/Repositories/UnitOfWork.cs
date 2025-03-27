@@ -15,6 +15,14 @@ public class UnitOfWork : IUnitOfWork
     private IRestaurantsRepository? _restaurantsRepository;
     private IDishesRepository? _dishesRepository;
     private IProfileRepository? _profileRepository;
+    private IAdditionImgUrlReponsitory? _additionImgUrlReponsitory;
+    private IAddressReponsitory? _addressReponsitory;
+    private IBrandReponsitory? _brandReponsitory;
+    private ICategoryReponsitory? _categoryReponsitory;
+    private IOrderDetailReponsitory? _orderDetailReponsitory;
+    private IOrderReponsitory? _orderReponsitory;
+    private IProductReponsitory? _productReponsitory;
+    private IReviewReponsitory? _reviewReponsitory;
 
     public UnitOfWork(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
     {
@@ -29,7 +37,23 @@ public class UnitOfWork : IUnitOfWork
         _dishesRepository ??= new DishesRepository(_dbContext);
 
     public IProfileRepository ProfileRepository =>
-         _profileRepository ??= new ProfileRepository(_dbContext);
+         _profileRepository ??= new ProfileRepository(_dbContext); 
+    public IAdditionImgUrlReponsitory AdditionImgUrlReponsitory =>
+         _additionImgUrlReponsitory ??= new AdditionImgUrlReponsitory(_dbContext); 
+    public IAddressReponsitory AddressReponsitory =>
+         _addressReponsitory ??= new AddressReponsitory(_dbContext);
+    public IBrandReponsitory BrandReponsitory =>
+         _brandReponsitory ??= new BrandReponsitory(_dbContext);
+    public ICategoryReponsitory CategoryReponsitory =>
+         _categoryReponsitory ??= new CategoryReponsitory(_dbContext); 
+    public IOrderDetailReponsitory OrderDetailReponsitory =>
+         _orderDetailReponsitory ??= new OrderDetailReponsitory(_dbContext);
+    public IOrderReponsitory OrderReponsitory =>
+         _orderReponsitory ??= new OrderReponsitory(_dbContext); 
+    public IProductReponsitory ProductReponsitory =>
+         _productReponsitory ??= new ProductReponsitory(_dbContext);
+    public IReviewReponsitory ReviewReponsitory =>
+         _reviewReponsitory ??= new ReviewReponsitory(_dbContext);
 
     public async Task<int> SaveChangeAsync()
     {

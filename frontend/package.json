@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "docker-compose": "^1.2.0"
+    "docker-compose": "^1.2.0",
+    "react-router-dom": "^7.4.0"
   }
 }
