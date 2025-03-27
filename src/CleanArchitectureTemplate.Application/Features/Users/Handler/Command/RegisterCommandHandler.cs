@@ -24,14 +24,17 @@ public class RegisterCommandHandler(IMediator mediator, IMapper mapper, UserMana
             Email = request.Email,
             DateOfBirth = request.DayOfBirth
         };
-
-        var result = await userManager.CreateAsync(user, request.Password);
-        if (result.Succeeded)
+        var profileCreate = mapper.Map<ProfileDTO>(request);
+        var createProfileCommand = new CreateProfileCommand { ProfileCreate = profileCreate };
+        var resultProfile = await mediator.Send(createProfileCommand);
+        if (resultProfile.Success)
         {
-            var profileCreate = mapper.Map<ProfileDTO>(request);
-            var createProfileCommand = new CreateProfileCommand { ProfileCreate = profileCreate };
-            await mediator.Send(createProfileCommand);
+            return await userManager.CreateAsync(user, request.Password);
         }
-        return result;
+        
+        return new IdentityResult
+        {
+            Errors = { }
+        };
     }
 }

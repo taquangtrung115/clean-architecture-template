@@ -16,7 +16,7 @@ public class AdditionImgUrlController(IMediator mediator) : ControllerBase
     [HttpGet]
     //[AllowAnonymous]
     //[Authorize(Policy = PolicyNames.CreatedAtleast2Restaurants)]
-    public async Task<ActionResult<IEnumerable<AdditionImgUrlDTO>>> GetAll(AdditionImgUrlQueryRequest query)
+    public async Task<ActionResult<IEnumerable<AdditionImgUrlDTO>>> GetAll([FromQuery] AdditionImgUrlQueryRequest query)
     {
         var additionImgUrls = await mediator.Send(query);
         return Ok(additionImgUrls);
@@ -24,7 +24,7 @@ public class AdditionImgUrlController(IMediator mediator) : ControllerBase
 
     [HttpGet("{id}")]
     //[Authorize(Policy = PolicyNames.HasNationality)]
-    public async Task<ActionResult<AdditionImgUrlDTO?>> GetById(Guid id)
+    public async Task<ActionResult<AdditionImgUrlDTO?>> GetById([FromQuery] Guid id)
     {
         var additionImgUrl = await mediator.Send(new AdditionImgUrlQueryByIdRequest { ID = id});
         return Ok(additionImgUrl);

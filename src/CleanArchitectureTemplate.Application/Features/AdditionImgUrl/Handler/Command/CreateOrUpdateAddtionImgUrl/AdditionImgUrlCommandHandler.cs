@@ -45,7 +45,7 @@ public class AdditionImgUrlCommandHandler(IUnitOfWork unitOfWork
                 };
             }
         }
-        await unitOfWork.SaveChangeAsync<Guid>();
+        await unitOfWork.SaveChangeAsync();
         return new BaseCommandResponse<Guid>
         {
             ID = Guid.Empty,

@@ -1,6 +1,6 @@
 namespace CleanArchitectureTemplate.Domain.Entities.Base;
 
-public abstract class Entity<TKey>
+public abstract class Entity
 {
-    public TKey Id { get; set; }
+    public Guid Id { get; set; }
 }

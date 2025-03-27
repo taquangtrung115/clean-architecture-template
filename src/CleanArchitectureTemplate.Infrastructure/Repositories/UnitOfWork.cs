@@ -47,10 +47,18 @@ public class UnitOfWork : IUnitOfWork
     public IReviewReponsitory ReviewReponsitory =>
          _reviewReponsitory ??= new ReviewReponsitory(_dbContext);
 
-    public async Task<int> SaveChangeAsync<IKey>()
+    public async Task<int> SaveChangeAsync()
     {
-        ApplyAuditInformation<IKey>();
-        return await _dbContext.SaveChangesAsync();
+        try
+        {
+            ApplyAuditInformation();
+            return await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            return await Task.FromResult(0);
+        }
+        
     }
 
     public void Dispose()
@@ -58,9 +66,9 @@ public class UnitOfWork : IUnitOfWork
         _dbContext.Dispose();
     }
 
-    public void ApplyAuditInformation<IKey>()
+    public void ApplyAuditInformation()
     {
-        var entries = _dbContext.ChangeTracker.Entries<AuditableEntity<IKey>>();
+        var entries = _dbContext.ChangeTracker.Entries<AuditableEntity>();
 
         string? currentUser = _httpContextAccessor.HttpContext?.User.Identity?.Name ?? "System";
 
@@ -71,7 +79,7 @@ public class UnitOfWork : IUnitOfWork
                 // Check if the Id is of type Guid and if it is empty, initialize it with a new Guid
                 if (entry.Entity.Id is Guid guid && guid == Guid.Empty)
                 {
-                    entry.Entity.Id = (IKey)(object)Guid.NewGuid();
+                    entry.Entity.Id = Guid.NewGuid();
                 }
                 switch (entry.State)
                 {

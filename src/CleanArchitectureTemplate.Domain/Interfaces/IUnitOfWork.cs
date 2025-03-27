@@ -14,6 +14,6 @@ public interface IUnitOfWork : IDisposable
     public IProductReponsitory ProductReponsitory { get; }
     public IReviewReponsitory ReviewReponsitory { get; }
 
-    public Task<int> SaveChangeAsync<IKey>();
-    public void ApplyAuditInformation<IKey>();
+    public Task<int> SaveChangeAsync();
+    public void ApplyAuditInformation();
 }

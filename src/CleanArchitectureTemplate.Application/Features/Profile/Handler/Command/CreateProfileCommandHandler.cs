@@ -19,7 +19,7 @@ public class CreateProfileCommandHandler(IUnitOfWork unitOfWork
         var profile = mapper.Map<CleanArchitectureTemplate.Domain.Entities.Profile>(request.ProfileCreate);
 
         profile = await unitOfWork.ProfileRepository.AddAsync(profile);
-        await unitOfWork.SaveChangeAsync<Guid>();
+        await unitOfWork.SaveChangeAsync();
         return new BaseCommandResponse<Guid>(profile.Id, true);
     }
 }

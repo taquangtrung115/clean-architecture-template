@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CleanArchitectureTemplate.Application.DTO.AdditionImgUrl;
 
-public class AdditionImgUrlDTO : AuditableEntity<Guid>
+public class AdditionImgUrlDTO : AuditableEntity
 {
     public Guid ProductID { get; set; }
     public string ImageUrl { get; set; }
