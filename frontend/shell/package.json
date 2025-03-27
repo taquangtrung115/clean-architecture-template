@@ -2,6 +2,10 @@
   "name": "shell",
   "version": "0.1.0",
   "private": true,
+  "main": "src/index.js",
+  "workspaces": [
+    "packages/*"
+  ],
   "dependencies": {
     "@module-federation/runtime": "^0.11.1",
     "@testing-library/dom": "^10.4.0",

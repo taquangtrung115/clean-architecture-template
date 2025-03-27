@@ -1,9 +1,9 @@
 import React, { Suspense } from "react";
-
-const RemoteAuth = React.lazy(() => import("authMFE/Login"));
-const RemoteUser = React.lazy(() => import("userMFE/Profile"));
-const RemoteProduct = React.lazy(() => import("productMFE/ProductList"));
-const RemoteOrder = React.lazy(() => import("orderMFE/OrderList"));
+const path = "/CleanAchitectureTemplate/frontend/microfrontends/";
+const RemoteAuth = React.lazy(() => import(`${path}/auth-mfe/src/Login`));
+const RemoteUser = React.lazy(() => import(`${path}/user-mfe/src/Login`));
+const RemoteProduct = React.lazy(() => import(`${path}/product-mfe/src/Login`));
+const RemoteOrder = React.lazy(() => import(`${path}/order-mfe/src/Login`));
 
 function App() {
   return (

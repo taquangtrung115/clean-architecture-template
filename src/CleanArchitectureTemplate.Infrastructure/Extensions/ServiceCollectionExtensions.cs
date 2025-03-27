@@ -63,6 +63,14 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRestaurantsRepository, RestaurantsRepository>();
         services.AddScoped<IDishesRepository, DishesRepository>();
         services.AddScoped<IProfileRepository, ProfileRepository>();
+        services.AddScoped<IAdditionImgUrlReponsitory, AdditionImgUrlReponsitory>();
+        services.AddScoped<IAddressReponsitory, AddressReponsitory>();
+        services.AddScoped<IBrandReponsitory, BrandReponsitory>();
+        services.AddScoped<ICategoryReponsitory, CategoryReponsitory>();
+        services.AddScoped<IOrderDetailReponsitory, OrderDetailReponsitory>();
+        services.AddScoped<IOrderReponsitory, OrderReponsitory>();
+        services.AddScoped<IProductReponsitory, ProductReponsitory>();
+        services.AddScoped<IReviewReponsitory, ReviewReponsitory>();
         
         // Unit Of Work 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
