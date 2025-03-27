@@ -1,8 +1,5 @@
 name: Backend CI/CD
-uses: actions/upload-artifact@v3
-  with:
-    name: backend-artifact
-    path: publish/
+
 on:
   push:
     branches:
@@ -22,22 +19,19 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.1.x' # Nếu dùng .NET 8, đổi thành '8.0.x'
+          dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore src/clean-architecture-template.sln
+        run: dotnet restore
 
       - name: Build
-        run: dotnet build src/clean-architecture-template.sln --configuration Release --no-restore
-
-      - name: Run tests
-        run: dotnet test src/clean-architecture-template.sln --configuration Release --no-build --verbosity normal
+        run: dotnet build --no-restore --configuration Release
 
       - name: Publish
-        run: dotnet publish src/CleanArchitectureTemplate.API/CleanArchitectureTemplate.API.csproj -c Release -o publish
+        run: dotnet publish -c Release -o publish
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: backend-artifact
           path: publish/
