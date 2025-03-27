@@ -1,11 +1,10 @@
-﻿using CleanArchitectureTemplate.Application.Features.AdditionImgUrls.Commands.CreateAdditionImgUrl;
-using CleanArchitectureTemplate.Application.Features.AdditionImgUrls.Commands.UpdateAdditionImgUrl;
-using CleanArchitectureTemplate.Application.Features.AdditionImgUrls.Commands.DeleteAdditionImgUrl;
-using CleanArchitectureTemplate.Application.Features.AdditionImgUrls.Queries.GetAllAdditionImgUrls;
-using CleanArchitectureTemplate.Application.Features.AdditionImgUrls.Queries.GetAdditionImgUrlById;
-using CleanArchitectureTemplate.Application.Features.AdditionImgUrls.Dtos;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using CleanArchitectureTemplate.Application.DTO.AdditionImgUrl;
+using CleanArchitectureTemplate.Application.Features.AdditionImgUrl.Request.Queries.GetAddtionImgUrl;
+using CleanArchitectureTemplate.Application.Features.AdditionImgUrl.Request.Queries.GetAddtionImgUrlById;
+using CleanArchitectureTemplate.Application.Features.AdditionImgUrl.Request.Command.DeleteAddtionImgUrl;
+using CleanArchitectureTemplate.Application.Features.AdditionImgUrl.Request.Command.CreateOrUpdateAddtionImgUrl;
 
 namespace CleanArchitectureTemplate.API.Controllers;
 
@@ -17,7 +16,7 @@ public class AdditionImgUrlController(IMediator mediator) : ControllerBase
     [HttpGet]
     //[AllowAnonymous]
     //[Authorize(Policy = PolicyNames.CreatedAtleast2Restaurants)]
-    public async Task<ActionResult<IEnumerable<AdditionImgUrlDto>>> GetAll([FromQuery] GetAllAdditionImgUrlsQuery query)
+    public async Task<ActionResult<IEnumerable<AdditionImgUrlDTO>>> GetAll(AdditionImgUrlQueryRequest query)
     {
         var additionImgUrls = await mediator.Send(query);
         return Ok(additionImgUrls);
@@ -25,38 +24,25 @@ public class AdditionImgUrlController(IMediator mediator) : ControllerBase
 
     [HttpGet("{id}")]
     //[Authorize(Policy = PolicyNames.HasNationality)]
-    public async Task<ActionResult<AdditionImgUrlDto?>> GetById([FromRoute] int id)
+    public async Task<ActionResult<AdditionImgUrlDTO?>> GetById(Guid id)
     {
-        var additionImgUrl = await mediator.Send(new GetAdditionImgUrlByIdQuery(id));
+        var additionImgUrl = await mediator.Send(new AdditionImgUrlQueryByIdRequest { ID = id});
         return Ok(additionImgUrl);
     }
 
     [HttpPost]
     //[Authorize(Roles = UserRoles.Owner)]
-    public async Task<IActionResult> CreateAdditionImgUrl(CreateAdditionImgUrlCommand command)
+    public async Task<IActionResult> CreateAdditionImgUrl(AdditionImgUrlCommandRequest command)
     {
         var id = await mediator.Send(command);
         return CreatedAtAction(nameof(GetById), new { id }, null);
     }
 
-    [HttpPut("{id}")]
-    //[Authorize(Roles = UserRoles.Owner)]
-    public async Task<IActionResult> UpdateAdditionImgUrl([FromRoute] int id, UpdateAdditionImgUrlCommand command)
-    {
-        if (id != command.Id)
-        {
-            return BadRequest();
-        }
-
-        await mediator.Send(command);
-        return NoContent();
-    }
-
     [HttpDelete("{id}")]
     //[Authorize(Roles = UserRoles.Owner)]
-    public async Task<IActionResult> DeleteAdditionImgUrl([FromRoute] int id)
+    public async Task<IActionResult> DeleteAdditionImgUrl(List<Guid> lstID)
     {
-        await mediator.Send(new DeleteAdditionImgUrlCommand(id));
+        await mediator.Send(new DeleteAddtionImgUrlCommandRequest { ListID = lstID });
         return NoContent();
     }
 }

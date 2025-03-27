@@ -8,8 +8,12 @@ namespace CleanArchitectureTemplate.Application.DTO.BaseDTO
 {
     public class BaseCommandResponse<T>
     {
-        public T ID { get; set; }
-        public bool Success { get; set; }
+        public BaseCommandResponse()
+        {
+            Errors = new List<string>();
+        }
+        public T ID { get; set; } = default!;
+        public bool Success { get; set; } = false;
         public string Message { get; set; }
         public List<string> Errors { get; set; }
         public BaseCommandResponse(T id, bool isSucces, List<string> errors)

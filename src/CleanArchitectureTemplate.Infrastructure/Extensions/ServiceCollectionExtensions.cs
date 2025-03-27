@@ -60,8 +60,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRestaurantSeeder, RestaurantSeeder>();
         
         // Đăng kí repo (sử dụng trong trường hơpj cần inject trực tiếp vào để xử lý trong Handler)
-        services.AddScoped<IRestaurantsRepository, RestaurantsRepository>();
-        services.AddScoped<IDishesRepository, DishesRepository>();
         services.AddScoped<IProfileRepository, ProfileRepository>();
         services.AddScoped<IAdditionImgUrlReponsitory, AdditionImgUrlReponsitory>();
         services.AddScoped<IAddressReponsitory, AddressReponsitory>();

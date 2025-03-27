@@ -15,6 +15,7 @@ public interface IGenericRepository<T> where T : class
     void SoftRemoveRange(List<T> entities);
     void Remove(T entity);
     void RemoveRange(List<T> entities);
+    void RemoveRange(List<Guid> entities);
     Task<(List<T>, int)> GetAllMatchingAsync(string? searchPhrase, 
         int pageSize, 
         int pageNumber, 
