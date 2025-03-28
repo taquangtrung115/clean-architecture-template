@@ -17,7 +17,7 @@ import {
 } from "./pages";
 import { landingLoader } from "./pages/Landing";
 import { singleProductLoader } from "./pages/SingleProduct";
-import { shopLoader } from "./pages/Shop";
+import { ShopLoad } from "./pages/Shop";
 import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
@@ -32,8 +32,7 @@ const router = createBrowserRouter([
       },
       {
         path: "shop",
-        element: <Shop />,
-        loader: shopLoader
+        element: <ShopLoad />,
 
       },
       {
@@ -74,15 +73,15 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path:"search",
+        path: "search",
         element: <Search />
       },
       {
-        path:"thank-you",
+        path: "thank-you",
         element: <ThankYou />
       },
       {
-        path:"order-history",
+        path: "order-history",
         element: <OrderHistory />
       }
     ],

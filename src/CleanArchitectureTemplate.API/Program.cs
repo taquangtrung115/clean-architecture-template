@@ -60,9 +60,9 @@ builder.Services.AddAuthentication(options =>
 var app = builder.Build();
 
 // Seed data
-//var scope = app.Services.CreateScope();
-//var seeder = scope.ServiceProvider.GetRequiredService<IRestaurantSeeder>();
-//await seeder.Seed();
+var scope = app.Services.CreateScope();
+var seeder = scope.ServiceProvider.GetRequiredService<IProductSeeder>();
+await seeder.Seed();
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();                            // ExceptionHandler 

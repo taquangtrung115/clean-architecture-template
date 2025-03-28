@@ -17,7 +17,7 @@ public abstract class GenericRepository<T>(ApplicationDbContext dbContext) : IGe
     {
         return await DbSet.FindAsync(id);
     }
-
+    
     public async Task<T> AddAsync(T entity)
     {
         await DbSet.AddAsync(entity);
@@ -71,4 +71,6 @@ public abstract class GenericRepository<T>(ApplicationDbContext dbContext) : IGe
         string? sortBy,
         SortDirection sortDirection,
         params Expression<Func<T, object>>[] includeProperties);
+
+   
 }

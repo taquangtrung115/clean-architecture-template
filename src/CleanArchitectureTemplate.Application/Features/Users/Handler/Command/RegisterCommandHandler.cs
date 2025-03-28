@@ -22,9 +22,16 @@ public class RegisterCommandHandler(IMediator mediator, IMapper mapper, UserMana
         {
             UserName = request.Username,
             Email = request.Email,
-            DateOfBirth = request.DayOfBirth
+            DateOfBirth = request.DayOfBirth,
+            Id = Guid.NewGuid().ToString()
         };
         var profileCreate = mapper.Map<ProfileDTO>(request);
+        if (!Guid.TryParse(user.Id, out Guid userID))
+        {
+            var error = new IdentityError { Description = "Error getting userID" };
+            return IdentityResult.Failed(error);
+        }
+        profileCreate.UserID = userID;
         var createProfileCommand = new CreateProfileCommand { ProfileCreate = profileCreate };
         var resultProfile = await mediator.Send(createProfileCommand);
         if (resultProfile.Success)

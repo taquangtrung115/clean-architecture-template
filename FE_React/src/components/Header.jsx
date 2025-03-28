@@ -8,12 +8,12 @@ import { AiFillShopping } from "react-icons/ai";
 import { FaSun } from "react-icons/fa6";
 import { FaMoon } from "react-icons/fa6";
 import { FaWindowClose } from "react-icons/fa";
-
+import { toast } from "react-toastify";
 import "../styles/Header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { changeMode } from "../features/auth/authSlice";
 import { store } from "../store";
-import axios from "axios";
+import CallAPI from "../utils/callApi";
 import { clearWishlist, updateWishlist } from "../features/wishlist/wishlistSlice";
 
 const Header = () => {
@@ -29,20 +29,20 @@ const Header = () => {
 
   const fetchWishlist = async () => {
     if (loginState) {
-      try {
-        const getResponse = await axios.get(`http://localhost:8080/user/${localStorage.getItem("id")}`);
-        const userObj = getResponse.data;
-
-        store.dispatch(updateWishlist({ userObj }));
-
-
-      } catch (error) {
-        console.error(error);
-      }
+      CallAPI(`v1/profiles/getById${localStorage.getItem("id")}`, "GET").then((res) => {
+        if (res && res.data && res.data.success === true) {
+          const userObj = res.data.datas[0];
+          store.dispatch(updateWishlist({ userObj }));
+        }
+        else {
+          toast.warn("Error get profile");
+        }
+      }).catch((err) => {
+        toast.error("Failed due to: " + err.message);
+      });
     } else {
       store.dispatch(clearWishlist());
     }
-
   };
 
 

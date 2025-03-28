@@ -25,4 +25,11 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Category\Handler\Command\" />
+    <Folder Include="Features\Category\Request\Command\" />
+    <Folder Include="Features\Product\Handler\Command\" />
+    <Folder Include="Features\Product\Request\Command\" />
+  </ItemGroup>
+
 </Project>

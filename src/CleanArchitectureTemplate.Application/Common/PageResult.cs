@@ -2,7 +2,7 @@ namespace CleanArchitectureTemplate.Application.Common;
 
 public class PageResult<T>
 {
-    public PageResult(IEnumerable<T> items, int totalCount, int pageSize, int pageNumber)
+    public PageResult(List<T> items, int totalCount, int pageSize, int pageNumber)
     {
         Items = items;
         TotalItemsCount = totalCount;
@@ -15,5 +15,5 @@ public class PageResult<T>
     public int TotalItemsCount { get; set; }
     public int ItemsFrom { get; set; }
     public int ItemsTo { get; set; }
-    public IEnumerable<T> Items { get; set; }
+    public List<T> Items { get; set; }
 }
