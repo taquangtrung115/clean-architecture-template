@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://0.0.0.0:5001"); // Cho phép truy cập từ mọi địa chỉ
 
 // Add user secrets to the configuration
 builder.Configuration.AddUserSecrets<Program>();
@@ -67,14 +68,14 @@ var app = builder.Build();
 app.UseExceptionHandler();                            // ExceptionHandler 
 app.UseMiddleware<RequestTimeLoggingMiddleware>();    // Middleware 
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 

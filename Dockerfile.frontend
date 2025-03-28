@@ -1,0 +1,28 @@
+# ===========================
+# 2️⃣ BUILD FRONTEND (React)
+# ===========================
+FROM node:20 AS frontend-build
+WORKDIR /app
+
+# Copy package.json trước để tối ưu cache
+COPY FE_React/package.json FE_React/package-lock.json ./
+
+RUN npm install
+
+# Copy toàn bộ source code vào container
+COPY FE_React/ ./
+
+# Build React app (đầu ra là thư mục /app/dist)
+RUN npm run build
+
+# ===========================
+# 3️⃣ DEPLOY FRONTEND (Nginx)
+# ===========================
+FROM nginx:alpine AS frontend
+WORKDIR /usr/share/nginx/html
+
+# 🟢 Copy từ /app/dist thay vì /app/build
+COPY --from=frontend-build /app/dist . 
+
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]

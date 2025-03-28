@@ -1,25 +1,18 @@
-version: '3.8'
-
 services:
   backend:
     build:
-      context: ./src
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: Dockerfile.backend
     ports:
-      - "5000:5000"
+      - "5001:5001" # Ensure 5000 is exposed in Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:5001
+      - ConnectionStrings__DefaultConnection=Server=TRUNGTQ-SS-HCM\MSSQLSERVER01,1433;Database=DBTemplate;Integrated Security=True;TrustServerCertificate=True;
     depends_on:
       - database
-
-  frontend:
-    build:
-      context: ./FE_React
-      dockerfile: Dockerfile
-    ports:
-      - "3000:80"
-    depends_on:
-      - backend
+    networks:
+      - backend_network
 
   database:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -27,10 +20,16 @@ services:
     ports:
       - "1433:1433"
     environment:
-      SA_PASSWORD: "YourStrongPassword!"
       ACCEPT_EULA: "Y"
+      MSSQL_AGENT_ENABLED: "true"
+      MSSQL_PID: "Developer"
     volumes:
       - sql_data:/var/opt/mssql
+    networks:
+      - backend_network
+
+networks:
+  backend_network:
 
 volumes:
   sql_data:

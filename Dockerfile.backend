@@ -1,0 +1,27 @@
+# ===========================
+# 1️⃣ BUILD BACKEND (ASP.NET Core)
+# ===========================
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS backend-build
+WORKDIR /src
+
+# Copy solution and projects
+COPY clean-architecture-template.sln ./
+COPY src/CleanArchitectureTemplate.API/*.csproj src/CleanArchitectureTemplate.API/
+COPY src/CleanArchitectureTemplate.Application/*.csproj src/CleanArchitectureTemplate.Application/
+COPY src/CleanArchitectureTemplate.Domain/*.csproj src/CleanArchitectureTemplate.Domain/
+COPY src/CleanArchitectureTemplate.Infrastructure/*.csproj src/CleanArchitectureTemplate.Infrastructure/
+
+# Restore dependencies
+RUN dotnet restore src/CleanArchitectureTemplate.API/CleanArchitectureTemplate.API.csproj
+
+# Copy the full source and build
+COPY src/ .
+WORKDIR /src/CleanArchitectureTemplate.API
+RUN dotnet publish -c Release -o /app/publish
+
+# Final image with runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS backend
+WORKDIR /app
+COPY --from=backend-build /app/publish .
+EXPOSE 5001
+CMD ["dotnet", "CleanArchitectureTemplate.API.dll"]
