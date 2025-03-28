@@ -45,3 +45,6 @@ dotnet ef database update -s .\src\CleanArchitectureTemplate.API\ -p .\src\Clean
 ## License
 
 [MIT]
+
+docker build -t clean-architecture-app -f Dockerfile.backend .
+docker build -t clean-architecture-app -f Dockerfile.frontend .
