@@ -9,6 +9,7 @@ namespace CleanArchitectureTemplate.Domain.Entities
 {
     public class Profile : AuditableEntity
     {
+        public Guid UserID { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
         public string Phone { get; set; }

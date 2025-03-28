@@ -57,7 +57,7 @@ public static class ServiceCollectionExtensions
         //    .AddApiEndpoints();
         
         // đăng kí seeder 
-        services.AddScoped<IRestaurantSeeder, RestaurantSeeder>();
+        services.AddScoped<IProductSeeder, ProductSeeder>();
         
         // Đăng kí repo (sử dụng trong trường hơpj cần inject trực tiếp vào để xử lý trong Handler)
         services.AddScoped<IProfileRepository, ProfileRepository>();

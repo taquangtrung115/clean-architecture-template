@@ -13,6 +13,7 @@ namespace CleanArchitectureTemplate.Application.DTO.BaseDTO
             Errors = new List<string>();
         }
         public T ID { get; set; } = default!;
+        public List<object> Datas { get; set; }
         public bool Success { get; set; } = false;
         public string Message { get; set; }
         public List<string> Errors { get; set; }

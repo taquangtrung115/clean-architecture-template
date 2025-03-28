@@ -1,12 +1,13 @@
 using CleanArchitectureTemplate.Application.DTO.Profile;
 using CleanArchitectureTemplate.Application.Features.Profile.Request.Command;
+using CleanArchitectureTemplate.Application.Features.Profile.Request.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitectureTemplate.API.Controllers;
 
 [ApiController]
-[Route("api/v{version:apiVersion}/profile")]
+[Route("api/v{version:apiVersion}/profiles")]
 //[Authorize]
 public class ProfileController(IMediator mediator) : ControllerBase
 {
@@ -19,13 +20,13 @@ public class ProfileController(IMediator mediator) : ControllerBase
     //    return Ok(restaurants);
     //}
 
-    //[HttpGet("{id}")]
-    ////[Authorize(Policy = PolicyNames.HasNationality)]
-    //public async Task<ActionResult<ProfileDTO?>> GetById([FromRoute] int id)
-    //{
-    //    var restaurant = await mediator.Send(new GetRestaurantByIdQuery(id));
-    //    return Ok(restaurant);
-    //}
+    [HttpGet("getById{id}")]
+    //[Authorize(Policy = PolicyNames.HasNationality)]
+    public async Task<ActionResult<ProfileDTO?>> GetById([FromRoute] Guid id)
+    {
+        var res = await mediator.Send(new GetProfileByIDQueryRequest { Id = id });
+        return Ok(res);
+    }
 
     //[HttpPost]
     ////[Authorize(Roles = UserRoles.Owner)]

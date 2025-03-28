@@ -11,6 +11,6 @@ namespace CleanArchitectureTemplate.Domain.Entities
     {
         public Guid ProductID { get; set; }
         public string ImageUrl { get; set; }
-        public bool IsLocalFolder { get; set; }
+        public bool IsLocalFolder { get; set; } = true;
     }
 }

@@ -1,4 +1,6 @@
 ﻿
+using CleanArchitectureTemplate.Application.DTO.Product;
+using CleanArchitectureTemplate.Application.Features.Product.Request.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,16 +11,16 @@ namespace CleanArchitectureTemplate.API.Controllers;
 //[Authorize]
 public class ProductController(IMediator mediator) : ControllerBase
 {
-    
-    //[HttpGet]
-    ////[AllowAnonymous]
-    ////[Authorize(Policy = PolicyNames.CreatedAtleast2Restaurants)]
-    //public async Task<ActionResult<IEnumerable<RestaurantDto>>> GetAll([FromQuery] GetRestaurantsQuery query)
-    //{
-    //    var restaurants = await mediator.Send(query);
-    //    return Ok(restaurants);
-    //}
-    
+
+    [HttpGet("getAll")]
+    //[AllowAnonymous]
+    //[Authorize(Policy = PolicyNames.CreatedAtleast2Restaurants)]
+    public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAll([FromQuery] GetProductAllQueryRequest query)
+    {
+        var products = await mediator.Send(query);
+        return Ok(products);
+    }
+
     //[HttpGet("{id}")]
     ////[Authorize(Policy = PolicyNames.HasNationality)]
     //public async Task<ActionResult<RestaurantDto?>> GetById([FromRoute]int id)
@@ -26,7 +28,7 @@ public class ProductController(IMediator mediator) : ControllerBase
     //    var restaurant = await mediator.Send(new GetRestaurantByIdQuery(id));
     //    return Ok(restaurant);
     //}
-    
+
     //[HttpPost]
     ////[Authorize(Roles = UserRoles.Owner)]
     //public async Task<IActionResult> CreateRestaurant(CreateRestaurantCommand command)
@@ -34,5 +36,5 @@ public class ProductController(IMediator mediator) : ControllerBase
     //    var id = await mediator.Send(command);
     //    return Created();
     //}
-    
+
 }

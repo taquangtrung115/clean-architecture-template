@@ -3,44 +3,49 @@ import { Link, useNavigate } from "react-router-dom";
 import { SectionTitle } from "../components";
 import { nanoid } from "nanoid";
 import { toast } from "react-toastify";
+import CallAPI from "../utils/callApi";
 
 const Register = () => {
-  const [name, setName] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [adress, setAdress] = useState("");
+  const [formData, setFormData] = useState({
+    lastname: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
+    address: "",
+    username: "",
+    name: "",
+
+  });
 
   const navigate = useNavigate();
 
   const isValidate = () => {
     let isProceed = true;
     let errorMessage = "";
-
-    if (name.length === 0) {
+    formData.name = formData.username + " " + formData.lastname;
+    if (formData.username.length === 0) {
       isProceed = false;
       errorMessage = "Please enter the value in username field";
-    } else if (lastname.length === 0) {
+    } else if (formData.lastname.length === 0) {
       isProceed = false;
       errorMessage = "Please enter the value in lastname field";
-    } else if (email.length === 0) {
+    } else if (formData.email.length === 0) {
       isProceed = false;
       errorMessage = "Please enter the value in email field";
-    } else if (phone.length < 4) {
+    } else if (formData.phone.length < 4) {
       isProceed = false;
       errorMessage = "Phone must be longer than 3 characters";
-    } else if (adress.length < 4) {
+    } else if (formData.address.length < 4) {
       isProceed = false;
       errorMessage = "Adress must be longer than 3 characters";
-    } else if (password.length < 6) {
+    } else if (formData.password.length < 6) {
       isProceed = false;
       errorMessage = "Please enter a password longer than 5 characters";
-    } else if (confirmPassword.length < 6) {
+    } else if (formData.confirmPassword.length < 6) {
       isProceed = false;
       errorMessage = "Please enter a confirm password longer than 5 characters";
-    } else if (password !== confirmPassword) {
+    } else if (formData.password !== formData.confirmPassword) {
       isProceed = false;
       errorMessage = "Passwords must match";
     }
@@ -52,41 +57,45 @@ const Register = () => {
     return isProceed;
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     let regObj = {
       id: nanoid(),
-      name,
-      lastname,
-      email,
-      phone,
-      adress,
-      password,
+      ...formData,
       userWishlist: [],
     };
 
     if (isValidate()) {
-      CallAPI("identity/register", "POST", regObj).then((res) => {
-        toast.success("Registration Successful");
-        navigate("/login");
-      }).catch((err) => {
-        toast.error("Failed: " + err.message);
-      });
-      // fetch("http://localhost:8080/user", {
-      //   method: "POST",
-      //   headers: { "content-type": "application/json" },
-      //   body: JSON.stringify(regObj),
-      // })
-      //   .then((res) => {
-      //     toast.success("Registration Successful");
-      //     navigate("/login");
-      //   })
-      //   .catch((err) => {
-      //     toast.error("Failed: " + err.message);
-      //   });
+      CallAPI("identity/register", "POST", regObj)
+        .then((res) => {
+          debugger;
+          if (res && res.data?.succeeded === true) {
+            toast.success("Registration Successful");
+            navigate("/login");
+          }
+          else if (res && res.data?.errors) {
+            toast.warn("Failed: " + res.data?.errors[0].description);
+          }
+          else {
+            toast.error("Failed network");
+          }
+        })
+        .catch((err) => {
+          debugger;
+          toast.error("Failed: " + err.message);
+        });
     }
   };
+
   return (
     <>
       <SectionTitle title="Register" path="Home | Register" />
@@ -95,74 +104,81 @@ const Register = () => {
           <div className="bg-dark border border-gray-600 shadow w-full rounded-lg divide-y divide-gray-200">
             <form className="px-5 py-7" onSubmit={handleSubmit}>
               <label className="font-semibold text-sm pb-1 block text-accent-content">
-                Name
+                User name
               </label>
               <input
                 type="text"
+                name="username"
                 className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required={true}
+                value={formData.username}
+                onChange={handleChange}
+                required
               />
               <label className="font-semibold text-sm pb-1 block text-accent-content">
                 Lastname
               </label>
               <input
                 type="text"
+                name="lastname"
                 className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-                value={lastname}
-                onChange={(e) => setLastname(e.target.value)}
-                required={true}
+                value={formData.lastname}
+                onChange={handleChange}
+                required
               />
               <label className="font-semibold text-sm pb-1 block text-accent-content">
                 E-mail
               </label>
               <input
                 type="email"
+                name="email"
                 className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required={true}
+                value={formData.email}
+                onChange={handleChange}
+                required
               />
               <label className="font-semibold text-sm pb-1 block text-accent-content">
                 Phone
               </label>
               <input
                 type="tel"
+                name="phone"
                 className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required={true}
+                value={formData.phone}
+                onChange={handleChange}
+                required
               />
               <label className="font-semibold text-sm pb-1 block text-accent-content">
                 Adress
               </label>
               <input
                 type="text"
+                name="address"
                 className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-                value={adress}
-                onChange={(e) => setAdress(e.target.value)}
-                required={true}
+                value={formData.address}
+                onChange={handleChange}
+                required
               />
               <label className="font-semibold text-sm pb-1 block text-accent-content">
                 Password
               </label>
               <input
                 type="password"
+                name="password"
                 className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required={true}
+                value={formData.password}
+                onChange={handleChange}
+                required
               />
               <label className="font-semibold text-sm pb-1 block text-accent-content">
                 Repeat Password
               </label>
               <input
                 type="password"
+                name="confirmPassword"
                 className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required={true}
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
               />
               <button
                 type="submit"

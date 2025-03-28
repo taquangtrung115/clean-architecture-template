@@ -51,9 +51,7 @@ public class IdentityController(IMediator mediator, IConfiguration configuration
     public async Task<IActionResult> Login(LoginCommand command)
     {
         var result = await mediator.Send(command);
-        if (!string.IsNullOrEmpty(result))
-            return Ok(new { Token = result });
-        return Unauthorized();
+        return Ok(result);
     }
     [HttpPost("register")]
     [AllowAnonymous]
@@ -65,11 +63,7 @@ public class IdentityController(IMediator mediator, IConfiguration configuration
         }
 
         var result = await mediator.Send(command);
-        if (result.Succeeded)
-        {
-            return Ok(new { message = "User registered successfully" });
-        }
-
-        return BadRequest(result.Errors);
+        
+        return Ok(result);
     }
 }

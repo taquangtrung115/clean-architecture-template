@@ -1,6 +1,6 @@
 ﻿namespace CleanArchitectureTemplate.Infrastructure.Seeders;
 
-public interface IRestaurantSeeder
+public interface IProductSeeder
 {
     Task Seed();
 }

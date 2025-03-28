@@ -45,14 +45,14 @@ const Login = () => {
     };
     if (isValidate()) {
       CallAPI("identity/login", "POST", objLogin).then((res) => {
-        debugger;
-        let data = res;
-        if (data) {
+        if (res && res.data && res.data.isSuccess === true) {
           toast.success("Login successful");
-          localStorage.setItem("tokenLogin", data.data.token);
+          localStorage.setItem("tokenLogin", res.data.token);
+          localStorage.setItem("id", res.data.id);
           store.dispatch(loginUser());
           navigate("/");
-        } else {
+        }
+        else {
           toast.warn("Email or password is incorrect");
         }
       }).catch((err) => {

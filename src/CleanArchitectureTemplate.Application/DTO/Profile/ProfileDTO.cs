@@ -9,6 +9,7 @@ namespace CleanArchitectureTemplate.Application.DTO.Profile
 {
     public class ProfileDTO : AuditableEntity
     {
+        public Guid UserID { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
         public string Phone { get; set; }

@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   Filters,
   Pagination,
@@ -7,101 +6,101 @@ import {
   SectionTitle,
 } from "../components";
 import "../styles/Shop.css";
-import axios from "axios";
-import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { nanoid } from "nanoid";
+import CallAPI from "../utils/callApi";
 
-export const shopLoader = async ({ request }) => {
-  const params = Object.fromEntries([
-    ...new URL(request.url).searchParams.entries(),
-  ]);
-  // /posts?title=json-server&author=typicode
-  // GET /posts?_sort=views&_order=asc
-  // GET /posts/1/comments?_sort=votes&_order=asc
+export const ShopLoad = () => {
+  const [data, setData] = useState([]);
+  const [dataFilter, setDataFilter] = useState({
+    Categories: [],
+    Brands: [],
+  });
+  useMemo(() => {
+    const getDataFilters = async () => {
+      try {
+        const [linhVucRes, customerRes, f2024Res] = await Promise.all([
+          GetLinhVucApp(),
+          GetKhachHang(),
+          GetF2024(),
+        ]);
+        setDataFilter(prev => ({
+          ...prev,
+          LinhVuc: linhVucRes.data?.isSuccess
+            ? linhVucRes.data?.listData.map((x) => ({
+              label: x.tenLinhVuc,
+              value: x.maLinhVuc
+            }))
+            : [],
+          KhachHang: customerRes.data?.isSuccess
+            ? customerRes.data?.listData.map((x) => ({
+              label: x.tenKH,
+              value: x.maKH
+            }))
+            : [],
+          KySu: f2024Res.data?.isSuccess
+            ? f2024Res.data?.listData.map((x) => ({
+              label: x.tenKySu,
+              value: x.maKysu
+            }))
+            : [],
+        }));
+        message.success("Lấy dữ liệu bộ lọc thành công");
+      } catch (error) {
+        message.error("Đã xảy ra lỗi");
+      } finally {
+        setLoading(false);
+      }
+    };
+    getDataFilters();
+  }, []);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      let parameter = `?PageNumber=1&PageSize=20`;
+      try {
+        const res = await CallAPI(`v1/products/getAll${parameter}`, "GET");
+        if (res && res.data && res.data.items) {
+          setData(res.data.items); // Correctly set the response data
+        } else {
+          toast.warn("Error fetching products");
+        }
+      } catch (err) {
+        toast.error("Failed due to: " + err.message);
+      }
+    };
 
-  let mydate = Date.parse(params.date);
-
-  if (mydate && !isNaN(mydate)) {
-    // The date is valid
-    mydate = new Date(mydate).toISOString();
-  } else {
-    mydate = "";
-  }
-
-  const filterObj = {
-    brand: params.brand ?? "all",
-    category: params.category ?? "all",
-    date: mydate ?? "",
-    gender: params.gender ?? "all",
-    order: params.order ?? "",
-    price: params.price ?? "all",
-    search: params.search ?? "",
-    in_stock: params.stock === undefined ? false : true,
-    current_page: Number(params.page) || 1
-  };
-
-  // set params in get apis
-  let parameter = (`?_start=${(filterObj.current_page - 1) * 10}&_limit=10`) + // pre defined that limit of response is 10 & page number count 1
-    (filterObj.brand !== 'all' ? `&brandName=${filterObj.brand}` : "") +
-    (filterObj.category !== 'all' ? `&category=${filterObj.category}` : "") +
-    (filterObj.gender !== 'all' ? `&gender=${filterObj.gender}` : ``) +
-    ((filterObj.search != '') ? `&q=${encodeURIComponent(filterObj.search)}` : ``) +
-    (filterObj.order ? `&_sort=price.current.value` : "") + // Check if the order exists, then sort it in ascending order. After that, the API response will be modified if descending order or any other filter is selected.
-    (filterObj.in_stock ? (`&isInStock`) : '') +
-    (filterObj.price !== 'all' ? `&price.current.value_lte=${filterObj.price}` : ``) +
-    (filterObj.date ? `&productionDate=${filterObj.date}` : ``) // It only matched exact for the date and time. 
-
-  try {
-    const response = await axios(
-      `http://localhost:8080/products${parameter}`
-
-    );
-    let data = response.data;
-
-    // sorting in descending order
-    if (filterObj.order && !(filterObj.order === "asc" || filterObj.order === "price low")) data.sort((a, b) => b.price.current.value - a.price.current.value)
-    return { productsData: data, productsLength: data.length, page: filterObj.current_page };
-  } catch (error) {
-    console.log(error.response);
-  }
-  // /posts?views_gte=10
-
-  return null;
-};
-
-
-
-
-const Shop = () => {
-
-  const productLoaderData = useLoaderData();
-
+    fetchProducts();
+  }, []); // Empty dependency array to run only once on component mount
 
   return (
     <>
       <SectionTitle title="Shop" path="Home | Shop" />
       <div className="max-w-7xl mx-auto mt-5">
         <Filters />
-        {productLoaderData.productsData.length === 0 && <h2 className="text-accent-content text-center text-4xl my-10">No products found for this filter</h2>}
+        {data.length === 0 && (
+          <h2 className="text-accent-content text-center text-4xl my-10">
+            No products found for this filter
+          </h2>
+        )}
         <div className="grid grid-cols-4 px-2 gap-y-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 shop-products-grid">
-          {productLoaderData.productsData.length !== 0 &&
-            productLoaderData.productsData.map((product) => (
+          {data.length !== 0 &&
+            data.map((product) => (
               <ProductElement
                 key={nanoid()}
                 id={product.id}
-                title={product.name}
+                title={product.productName}
                 image={product.imageUrl}
                 rating={product.rating}
-                price={product.price.current.value}
+                price={product.price}
                 brandName={product.brandName}
               />
             ))}
         </div>
       </div>
 
-      <Pagination />
+      <Pagination data={data} />
     </>
   );
 };
 
-export default Shop;
+export default ShopLoad;

@@ -27,7 +27,7 @@ public class AdditionImgUrlQueryHandler(ILogger<AdditionImgUrlQueryHandler> logg
                 request.SortBy,
                 request.SortDirection);
 
-        var additionImgUrlDTO = mapper.Map<IEnumerable<AdditionImgUrlDTO>>(additionImgUrls);
+        var additionImgUrlDTO = mapper.Map<List<AdditionImgUrlDTO>>(additionImgUrls);
 
         var result = new PageResult<AdditionImgUrlDTO>(additionImgUrlDTO, totalCount, request.PageSize, request.PageNumber);
         return result;

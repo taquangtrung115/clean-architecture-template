@@ -1,4 +1,5 @@
-﻿using CleanArchitectureTemplate.Application.Features.Users.Request.Command;
+﻿using CleanArchitectureTemplate.Application.DTO.User.Login;
+using CleanArchitectureTemplate.Application.Features.Users.Request.Command;
 using CleanArchitectureTemplate.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -16,7 +17,7 @@ namespace CleanArchitectureTemplate.Application.Features.Users.Handler.Command;
 public class LoginCommandHandler(IConfiguration configuration
         , UserManager<ApplicationUser> userManager
         , SignInManager<ApplicationUser> signInManager
-        ) : IRequestHandler<LoginCommand, string>
+        ) : IRequestHandler<LoginCommand, LoginResponse>
 {
     private string GenerateJwtToken(ApplicationUser user)
     {
@@ -37,16 +38,23 @@ public class LoginCommandHandler(IConfiguration configuration
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
-    public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
+        var res = new LoginResponse();
         var result = await signInManager.PasswordSignInAsync(request.Username, request.Password, false, false);
         if (result.Succeeded)
         {
             var user = await userManager.FindByNameAsync(request.Username);
             var token = GenerateJwtToken(user);
-            return token;
+            if (Guid.TryParse(user.Id, out Guid userID))
+            {
+                res.Id = userID;
+                res.IsSuccess = true;
+                res.Token = token;
+                return res;
+            }
         }
-
-        return string.Empty;
+        res.Errors = new List<string> { "Invalid login attempt." };
+        return res;
     }
 }

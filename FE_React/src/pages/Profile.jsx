@@ -4,6 +4,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import CallAPI from "../utils/callApi";
 
 const Profile = () => {
   const [id, setId] = useState(localStorage.getItem("id"));
@@ -22,20 +23,25 @@ const Profile = () => {
   const navigate = useNavigate();
 
   const getUserData = async () => {
-    try {
-      const response = await axios(`http://localhost:8080/user/${id}`);
-      const data = response.data;
-      setUserFormData({
-        name: data.name,
-        lastname: data.lastname,
-        email: data.email,
-        phone: data.phone,
-        adress: data.adress,
-        password: data.password,
-      });
-    } catch (error) {
-      toast.error("Error: ", error.response);
-    }
+
+    CallAPI(`v1/profiles/getById${localStorage.getItem("id")}`, "GET").then((res) => {
+      if (res && res.data && res.data.success === true) {
+        const data = res.data.datas[0];
+        setUserFormData({
+          name: data.name,
+          lastname: data.lastname,
+          email: data.email,
+          phone: data.phone,
+          address: data.address,
+          password: data.password,
+        });
+      }
+      else {
+        toast.warn("Error get profile");
+      }
+    }).catch((err) => {
+      toast.error("Failed due to: " + err.message);
+    });
   };
 
   useEffect(() => {
@@ -49,7 +55,7 @@ const Profile = () => {
 
   const updateProfile = async (e) => {
     e.preventDefault();
-    try{
+    try {
 
       const getResponse = await axios(`http://localhost:8080/user/${id}`);
       const userObj = getResponse.data;
@@ -67,7 +73,7 @@ const Profile = () => {
         //userWishlist treba da stoji ovde kako bi sacuvao stanje liste zelja
       });
       const putData = putResponse.data;
-    }catch(error){
+    } catch (error) {
       console.log(error.response);
     }
   }
@@ -86,7 +92,7 @@ const Profile = () => {
               placeholder="Type here"
               className="input input-bordered w-full lg:max-w-xs"
               value={userFormData.name}
-              onChange={(e) => {setUserFormData({...userFormData, name: e.target.value})}}
+              onChange={(e) => { setUserFormData({ ...userFormData, name: e.target.value }) }}
             />
           </div>
 
@@ -99,7 +105,7 @@ const Profile = () => {
               placeholder="Type here"
               className="input input-bordered w-full lg:max-w-xs"
               value={userFormData.lastname}
-              onChange={(e) => {setUserFormData({...userFormData, lastname: e.target.value})}}
+              onChange={(e) => { setUserFormData({ ...userFormData, lastname: e.target.value }) }}
             />
           </div>
 
@@ -112,7 +118,7 @@ const Profile = () => {
               placeholder="Type here"
               className="input input-bordered w-full lg:max-w-xs"
               value={userFormData.email}
-              onChange={(e) => {setUserFormData({...userFormData, email: e.target.value})}}
+              onChange={(e) => { setUserFormData({ ...userFormData, email: e.target.value }) }}
             />
           </div>
 
@@ -125,7 +131,7 @@ const Profile = () => {
               placeholder="Type here"
               className="input input-bordered w-full lg:max-w-xs"
               value={userFormData.phone}
-              onChange={(e) => {setUserFormData({...userFormData, phone: e.target.value})}}
+              onChange={(e) => { setUserFormData({ ...userFormData, phone: e.target.value }) }}
             />
           </div>
 
@@ -138,7 +144,7 @@ const Profile = () => {
               placeholder="Type here"
               className="input input-bordered w-full lg:max-w-xs"
               value={userFormData.adress}
-              onChange={(e) => {setUserFormData({...userFormData, adress: e.target.value})}}
+              onChange={(e) => { setUserFormData({ ...userFormData, adress: e.target.value }) }}
             />
           </div>
 
@@ -151,7 +157,7 @@ const Profile = () => {
               placeholder="Type here"
               className="input input-bordered w-full lg:max-w-xs"
               value={userFormData.password}
-              onChange={(e) => {setUserFormData({...userFormData, password: e.target.value})}}
+              onChange={(e) => { setUserFormData({ ...userFormData, password: e.target.value }) }}
             />
           </div>
         </div>
